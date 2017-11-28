@@ -13,21 +13,18 @@ public class ProcessingSystem {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
 		String line;
+		SLLQueue<job> jobs = new SLLQueue<job>();
 
-		int counter;
-		job[] jobs = new job[10];
 
-		counter = 0;
-
-		try (BufferedReader reader = new BufferedReader(new FileReader("/home/students/4035d3/Desktop/labQueue-master/input4.csv"))){
+		try (BufferedReader reader = new BufferedReader(new FileReader("/Users/Javdav/Documents/ICOM 4035/Programs/L6_QueueLab_2017 Student/input4.csv"))){
 
 			while((line = reader.readLine()) != null){
 				String[] s = line.split(",");
 
 				int arrival = Integer.parseInt(s[0]);
 				int timeToJob = Integer.parseInt(s[1]);
-				jobs[counter] = new job(arrival, timeToJob);
-				counter++;
+				job tmp = new job(arrival, timeToJob);
+				jobs.enqueue(tmp);
 
 				
 			}
@@ -36,24 +33,19 @@ public class ProcessingSystem {
 		{
 			
 		}
-		job[] processJobs = new job[counter];
-		for(int i=0;i<counter;i++){
-			processJobs[i] = jobs[i];
-		}
-		System.out.println(process(processJobs));
+		
+		
+		System.out.println(process(jobs));
 
 	}
 	
-	public static double process(job[] jobs){
+	public static double process(SLLQueue<job> inputQueue){
 		
-		SLLQueue<job> inputQueue = new SLLQueue<job>();
 		SLLQueue<job> processingQueue = new SLLQueue<job>();
 		ArrayList<job> terminatedJobs = new ArrayList<job>();
 		int time = 0;
 		
-		for(int i=0;i<jobs.length;i++){
-			inputQueue.enqueue(jobs[i]);
-		}
+		
 		while(!inputQueue.isEmpty() || !processingQueue.isEmpty()){
 			if(!processingQueue.isEmpty()){
 				job firstJob = processingQueue.first();
